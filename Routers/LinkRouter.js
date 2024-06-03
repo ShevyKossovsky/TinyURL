@@ -8,7 +8,7 @@ LinkRouter.post('/', LinkController.createLink);
 LinkRouter.get('/:id', LinkController.getLink);
 LinkRouter.put('/:id', LinkController.updateLink);
 LinkRouter.delete('/:id', LinkController.deleteLink);
-LinkRouter.get('/r/:id', LinkController.redirectLink); // הנתיב החדש ל-redirect
+LinkRouter.get('/r/:id', LinkController.redirectLink);
 
 export default LinkRouter;
 

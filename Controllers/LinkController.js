@@ -72,6 +72,30 @@ const LinkController = {
       res.status(500).send({ error: 'An error occurred while redirecting the link.' });
     }
   }
+  ,
+
+  getClicksBySource: async (req, res) => {
+    try {
+      const link = await Link.findById(req.params.id);
+      if (!link) {
+        return res.status(404).send({ error: 'Link not found.' });
+      }
+
+      // מצא את הקליקים לפי המקורות השונים
+      const clicksBySource = {};
+      link.clicks.forEach(click => {
+        if (!clicksBySource[click.targetParamValue]) {
+          clicksBySource[click.targetParamValue] = 1;
+        } else {
+          clicksBySource[click.targetParamValue]++;
+        }
+      });
+
+      res.send(clicksBySource);
+    } catch (error) {
+      res.status(500).send({ error: 'An error occurred while fetching clicks by source.' });
+    }
+  }
 };
 
 export default LinkController;
