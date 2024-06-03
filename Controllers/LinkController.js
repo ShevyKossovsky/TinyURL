@@ -74,28 +74,25 @@ const LinkController = {
   }
   ,
 
-  getClicksBySource: async (req, res) => {
+    getLinkClicks : async (req, res) => {
+    const { id } = req.params;
     try {
-      const link = await Link.findById(req.params.id);
-      if (!link) {
-        return res.status(404).send({ error: 'Link not found.' });
-      }
-
-      // מצא את הקליקים לפי המקורות השונים
-      const clicksBySource = {};
-      link.clicks.forEach(click => {
-        if (!clicksBySource[click.targetParamValue]) {
-          clicksBySource[click.targetParamValue] = 1;
-        } else {
-          clicksBySource[click.targetParamValue]++;
-        }
-      });
-
-      res.send(clicksBySource);
+      const link = await Link.findById(id).populate('clicks');
+      if (!link) return res.status(404).json({ message: 'Link not found' });
+  
+      const clicksByTarget = link.clicks.reduce((acc, click) => {
+        const target = click.targetParamValue || 'unknown';
+        if (!acc[target]) acc[target] = [];
+        acc[target].push(click);
+        return acc;
+      }, {});
+  
+      res.status(200).json(clicksByTarget);
     } catch (error) {
-      res.status(500).send({ error: 'An error occurred while fetching clicks by source.' });
+      res.status(400).json({ message: error.message });
     }
   }
+  
 };
 
 export default LinkController;

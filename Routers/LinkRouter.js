@@ -9,6 +9,7 @@ LinkRouter.get('/:id', LinkController.getLink);
 LinkRouter.put('/:id', LinkController.updateLink);
 LinkRouter.delete('/:id', LinkController.deleteLink);
 LinkRouter.get('/r/:id', LinkController.redirectLink);
+LinkRouter.get('/:id/clicks', LinkController.getLinkClicks);
 
 export default LinkRouter;
 
