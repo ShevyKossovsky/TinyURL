@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors'; 
 import dotenv from 'dotenv';
+import connectDB from './db.js';  
+
 
 // Load environment variables from .env file
 dotenv.config();
@@ -12,10 +14,10 @@ import LinkRouter from './Routers/LinkRouter.js';
 
 const app = express();
 
+
+
 // Connect to MongoDB using the URI from the environment variable
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Could not connect to MongoDB', err));
+connectDB();
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -23,7 +25,6 @@ app.use(bodyParser.json());
 
 app.use('/users', UserRouter);
 app.use('/links', LinkRouter);
-
 app.get('/', (req, res) => {
   res.send(`
     <html>

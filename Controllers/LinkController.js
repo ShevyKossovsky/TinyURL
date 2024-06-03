@@ -1,15 +1,14 @@
 import Link from '../Models/Link.js';
 import User from '../Models/User.js';
+
 const LinkController = {
   createLink: async (req, res) => {
     try {
       const link = new Link(req.body);
       await link.save();
-
       const user = await User.findById(req.body.user);
       user.links.push(link);
       await user.save();
-
       res.status(201).send(link);
     } catch (error) {
       res.status(500).send({ error: 'An error occurred while creating the link.' });
@@ -24,12 +23,13 @@ const LinkController = {
       res.status(500).send({ error: 'An error occurred while fetching the link.' });
     }
   },
+
   getAllLinks: async (req, res) => {
     try {
       const links = await Link.find();
       res.send(links);
     } catch (error) {
-      res.status(500).send({ error: 'An error occurred while fetching the link.' });
+      res.status(500).send({ error: 'An error occurred while fetching the links.' });
     }
   },
 
@@ -48,6 +48,28 @@ const LinkController = {
       res.send({ message: 'Link deleted' });
     } catch (error) {
       res.status(500).send({ error: 'An error occurred while deleting the link.' });
+    }
+  },
+
+  redirectLink: async (req, res) => {
+    try {
+      const link = await Link.findById(req.params.id);
+      if (!link) {
+        return res.status(404).send({ error: 'Link not found.' });
+      }
+
+      // Update the link's click information
+      const click = {
+        insertedAt: new Date(),
+        ipAddress: req.ip
+      };
+      link.clicks.push(click);
+      await link.save();
+
+      // Redirect to the original URL
+      res.redirect(link.originalUrl);
+    } catch (error) {
+      res.status(500).send({ error: 'An error occurred while redirecting the link.' });
     }
   }
 };
