@@ -1,37 +1,41 @@
+# TinyURL Management System - Server
 
-# TinyUrl Server
+## Overview
 
-TinyUrl Server is a project created to generate a URL shortening service, similar to the popular service TinyUrl.
+TinyURL Service is a URL shortening service that allows users to create short aliases for long URLs. This service simplifies sharing URLs and can be used in various applications where long URLs are not feasible. This README provides an overview of the service, including its features, usage instructions, and deployment steps.
+
+## Features
+
+- **URL Shortening**: Convert long URLs into short, manageable links.
+- **Custom Aliases**: Optionally customize the alias for each shortened URL.
+- **Click Tracking**: Track the number of clicks on each shortened URL.
+- **User Authentication**: Allow users to register accounts and manage their shortened URLs.
+
+
 
 ## Installation
 
-1. Install all dependencies by running the command:
+1. Clone the repository using Git:
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+1. Clone the repository
     ```bash
-    npm install
+    git clone https://github.com/ShevyKossovsky/Node.js_project.git
     ```
-
-2. Configure your MongoDB database connection URI. As the database is running in the cloud, you may need to provide your connection URI directly in your code or through environment variables.
-
-3. Run the server by executing the command:
+2. Install dependencies:
+    ```bash
+    npm i
+    ```
+3. Run the server:
     ```bash
     npm start
     ```
 
-## Usage
 
-### Creating a New Link
+## License
+© 2024 Shevy Kossovsky All rights reserved.
 
-To create a new link, send a POST request to the `/links` endpoint with the following body:
-
-```json
-{
-  "originalUrl": "<Original URL of the link>",
-  "user": "<User ID or empty if no user is registered>",
-  "targetParamName": "<Special parameter name in the URL to store the source of the advertisement>",
-  "targetValues": [
-    {
-      "name": "<Name of the advertisement source>",
-      "value": "<Value of the special parameter corresponding to the advertisement source>"
-    }
-  ]
-}
+### contact
+0556773361 s0556773361@gmail.com
