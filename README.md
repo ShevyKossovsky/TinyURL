@@ -1,4 +1,4 @@
-# TinyURL Management System - Server
+# TinyURL Service - Server
 
 ## Overview
 
