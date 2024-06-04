@@ -1,60 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Bar } from 'react-chartjs-2';
+// App.jsx
+import React, { useEffect, useState } from 'react';
+import { Container, Grid, Paper, Typography } from '@mui/material';
+import './App.css';
+import DaysOfWeekChart from './components/daysOfWeekChart/DaysOfWeekChart';
+import SourcesChart from './components/sourcesChart/SourcesChart';
+import TotalClicksChart from './components/totalClicksChart/TotalClicksChart';
+import UrlClicksChart from './components/urlClicksChart/UrlClicksChart';
 
-const LinkAnalytics = () => {
-  const [clickData, setClickData] = useState({});
+const App = () => {
+  const [links, setLinks] = useState([]);
+  const [selectedLink, setSelectedLink] = useState();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/links/');
-        setClickData(response.data);
-      } catch (error) {
-        console.error('Error fetching click analytics:', error);
-      }
-    };
-
-    fetchData();
+    fetch('http://localhost:3000/links')
+      .then(response => response.json())
+      .then(data => setLinks(data))
+      .catch(error => console.error('Error fetching links data:', error));
   }, []);
 
+  const handleLinkClick = (link) => {
+    setSelectedLink(link);
+  };
+
   return (
-    <div>
-      <h2>Link Analytics</h2>
-      <Bar
-        data={{
-          labels: Object.keys(clickData),
-          datasets: [
-            {
-              label: 'Clicks',
-              backgroundColor: 'rgba(75,192,192,1)',
-              borderColor: 'rgba(0,0,0,1)',
-              borderWidth: 2,
-              data: Object.values(clickData),
-            },
-          ],
-        }}
-        options={{
-          title: {
-            display: true,
-            text: 'Clicks Distribution',
-            fontSize: 20,
-          },
-          legend: {
-            display: true,
-            position: 'right',
-          },
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true,
-              },
-            }],
-          },
-        }}
-      />
-    </div>
+    <Container>
+      <Typography variant="h2" align="center" gutterBottom>
+        TinyUrl Dashboard
+      </Typography>
+      
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} style={{ padding: '20px' }}>
+            <TotalClicksChart links={links} onLinkClick={handleLinkClick} />
+          </Paper>
+        </Grid>
+       
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} style={{ padding: '20px' }}>
+            <DaysOfWeekChart links={links} />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} style={{ padding: '20px' }}>
+            <SourcesChart links={links} />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Paper elevation={3} style={{ padding: '20px' }}>
+            <div> {console.log(selectedLink)}</div>
+            <UrlClicksChart data={links} onLinkClick={handleLinkClick} />
+          </Paper>
+        </Grid>
+      </Grid>
+
+    </Container>
   );
 };
 
-export default LinkAnalytics;
+export default App;
